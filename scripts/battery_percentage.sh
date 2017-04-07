@@ -16,7 +16,9 @@ print_battery_percentage() {
 			energy=$(upower -i $battery | awk -v nrg="$energy" '/energy:/ {print nrg+$2}')
 			energy_full=$(upower -i $battery | awk -v nrgfull="$energy_full" '/energy-full:/ {print nrgfull+$2}')
 		done
-		echo $energy $energy_full | awk '{printf("%d%%", ($1/$2)*100)}'
+    if [[ ! -z $energy ]] || [[ ! -z $energy_full ]]; then
+      echo $energy $energy_full | awk '{printf("%d%%", ($1/$2)*100)}'
+    fi
 	elif command_exists "acpi"; then
 		acpi -b | grep -Eo "[0-9]+%"
 	fi
